@@ -1,0 +1,15 @@
+require 'rspec/core/rake_task'
+
+namespace :spec do
+  desc 'Build docker image'
+  task :build_image do
+    sh 'docker build . -t example-openjdk'
+  end
+
+  desc 'Run infrastructure tests'
+  RSpec::Core::RakeTask.new(infra: 'spec:build_image') do |t|
+    t.pattern = 'spec/*_spec.rb'
+  end
+
+  task default: :all
+end

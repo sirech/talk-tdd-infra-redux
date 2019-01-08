@@ -12,11 +12,110 @@ layout: true
 class: impact
 
 # {{title}}
+
+---
+
 ## Mario Fernandez
+### Lead Developer
+### ThoughtWorks
+
+---
+
+class: center middle
+
+## Path to production
+
+---
+
+class: center middle
+
+.image-grid[
+.img[![nomad](images/nomad.png)]
+.img[![k8s](images/k8s.png)]
+.img[![ecs](images/ecs.jpeg)]
+.img[![swarm](images/swarm.png)]
+]
 
 ---
 
 # Let's containerize an app
+## Based on a real experience
+
+---
+
+# Build app
+## Wholly unprepared to run inside a container
+
+---
+
+class: center middle
+
+## Barely understand Docker
+
+---
+
+class: center middle
+
+## Vomit stuff on Dockerfile
+
+---
+
+class: center middle
+
+## Wait 40+ mins for image to be built
+
+---
+
+class: center middle
+
+## Does not work
+
+---
+
+class: center middle
+
+## Despair
+
+---
+
+class: center middle
+
+## Consider career choices
+
+---
+
+class: center middle
+
+## Repeat
+
+---
+
+class: center middle
+
+## There has to be a better way
+
+---
+
+class: center middle
+
+## Use the right tools
+
+---
+
+class: center middle
+
+![serverspec](images/serverspec.png)
+
+---
+
+class: center middle
+
+## Write RSpec tests for infrastructure
+
+---
+
+# Let's containerize an app
+## Now with a lot less pain
 
 ---
 
@@ -193,12 +292,41 @@ CMD ["java", "-jar", "gs-rest-service.jar"]
 
 ---
 
+class: full-width
+background-image: url(images/pipeline.png)
+
+---
+
+# What else?
+
+---
+
+Running healthcheck
+
+---
+
+Scenario: Container with dependencies
+
+---
+
+entrypoint with aws
+
+---
+
+docker compose with localstack
+
+---
+
+run docker compose 
+
+---
+
 # Links
 
 - _ServerSpec_ resource types: https://serverspec.org/resource_types.html
 - https://www.thoughtworks.com/insights/blog/modernizing-your-build-pipelines
 - Integrate _ServerSpec_ in _Concourse_: https://github.com/sirech/example-concourse-pipeline
-- Full example
+- Code for the example: https://github.com/sirech/talk-tdd-infra-redux/tree/master/code
 
 
 

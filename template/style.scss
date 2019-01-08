@@ -1,9 +1,9 @@
 // Theme
 // ---------------------------------------------------------------------------
 
-$primary          : #3F51B5;
-$secondary        : #009688;
-$tertiary         : #757575;
+$primary          : #004ebf;
+$secondary        : #bf7c00;
+$tertiary         : #bf1d00;
 $light            : #FFF;
 $dark             : #333;
 $text-dark        : #212121; 
@@ -228,4 +228,11 @@ blockquote {
 
 .full-height {
   background-size: auto 100%;
+}
+
+.image-grid p {
+  display: grid;
+  grid-template-rows: repeat(2, 1fr);
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 15px;
 }

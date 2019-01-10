@@ -13,17 +13,74 @@ class: impact
 
 # {{title}}
 
+
 ---
 
+class: impact
+
+.col-6[
+# Why?
+]
+
+.col-6[
+# How?
+]
+
+???
+
+- Goal: Help you get started testing your infra
+
+
+---
+
+class: impact center middle
+
 ## Mario Fernandez
-### Lead Developer
-### ThoughtWorks
+ Lead Developer
+ 
+ 
+ **Thought**Works
+
+---
+
+## .bubble[Nov 17] Tech Radar
+
+--
+
+> Many development teams have adopted *test-driven development* practices for writing application code because of their benefits. 
+
+--
+
+<hr />
+> Others have turned to *containers* to package and deploy their software, and it's accepted practice to use automated scripts to build the containers.
+
+--
+
+<hr />
+> What we’ve seen few teams do so far is combine the two trends and drive the writing of the container scripts using tests.
+
+---
+
+class: middle center
+
+![tdd](images/tdd.png)
+
+???
+
+- Who claims to do TDD here?
+- Who actually _practices_ TDD?
+
+---
+
+class: middle center
+
+![docker](images/docker.png)
 
 ---
 
 class: center middle
 
-## Path to production
+## Path to Production
 
 ---
 
@@ -38,61 +95,51 @@ class: center middle
 
 ---
 
-# Let's containerize an app
-## Based on a real experience
+class: transition
+
+# My first experience with Docker
 
 ---
 
-# Build app
-## Wholly unprepared to run inside a container
+class: middle
+
+# Setup
+## 8+ years old Ruby monolith
 
 ---
 
-class: center middle
+class: middle
 
-## Barely understand Docker
-
----
-
-class: center middle
-
-## Vomit stuff on Dockerfile
+# Job to be done
+## Package the app as a container
+## Would run in a VM as a sandbox
 
 ---
 
-class: center middle
+# How it went
 
-## Wait 40+ mins for image to be built
+--
 
----
-
-class: center middle
-
-## Does not work
-
----
-
-class: center middle
-
-## Despair
+.menu[
+- .item[Try something]
+- .item[Wait 40+ mins]
+- .item[Did not work]
+- .item[I don't know what I'm doing]
+- .item[Despair]
+- .item[Consider career choice]
+]
 
 ---
 
-class: center middle
-
-## Consider career choices
-
----
-
-class: center middle
-
-## Repeat
-
----
-
-class: center middle
+class: transition
 
 ## There has to be a better way
+
+---
+
+class: center middle
+
+## Fast feedback
 
 ---
 
@@ -114,12 +161,30 @@ class: center middle
 
 ---
 
+class: impact 
+
 # Let's containerize an app
 ## Now with a lot less pain
 
 ---
 
-spring boot application with one route (/greeting), JAR already built
+class: center
+
+![springboot](images/springboot.jpg)
+
+???
+
+- spring boot application with one route (/greeting), JAR already built
+
+---
+
+## Pic with server and one route
+
+---
+
+class: center middle
+
+![jar](images/jar.png)
 
 ---
 
@@ -297,7 +362,9 @@ background-image: url(images/pipeline.png)
 
 ---
 
-# What else?
+class: transition
+
+# This is but a start
 
 ---
 

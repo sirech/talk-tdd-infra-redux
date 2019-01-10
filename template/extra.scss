@@ -1,0 +1,41 @@
+// Menu
+$item-count: 6;
+$item-size: 40px;
+
+.menu {
+  ul {
+    text-align: center;
+  }
+
+  li {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    display: block;
+    width: 480px;
+    height: 450px;
+  }
+
+  .item {
+    display: inline-block;
+    background-color: $code-background;
+    border-radius: 25%;
+    padding: 0.3rem;
+  }
+
+  @for $i from 0 through $item-count - 1 {
+    li:nth-child(#{$i + 1}) {
+      transform: rotate(360deg / $item-count * $i) translateX(-$item-size);
+    }
+  }
+
+}
+
+@for $i from 0 through $item-count - 1 {
+  li:nth-child(#{$i + 1}) .item {
+    transform: rotate(-360deg / $item-count * $i);
+  }
+}

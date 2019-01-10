@@ -217,6 +217,13 @@ blockquote {
 
 // Mine
 
+.transition {
+  background-color: $secondary;
+  vertical-align: middle;
+  text-align: center;
+  &, h1, h2 { color: $text-light; }
+}
+
 .reverse {
   &, h1, h2 { color: $primary; }
   background-color: $text-light !important;
@@ -236,3 +243,14 @@ blockquote {
   grid-template-columns: repeat(2, 1fr);
   grid-gap: 15px;
 }
+
+.bubble {
+  color: $light;
+  background-color: $text-dark;
+  border-radius: 50%;
+  opacity: 0.8;
+  padding: 0.7rem 0.9rem;
+}
+
+// Rotating menu
+@import './extra.scss';

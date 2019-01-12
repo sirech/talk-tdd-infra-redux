@@ -362,29 +362,220 @@ background-image: url(images/pipeline.png)
 
 ---
 
+class: center middle
+
+## Code
+### https://github.com/sirech/talk-tdd-infra-redux/tree/master/code
+
+---
+
 class: transition
 
 # This is but a start
 
 ---
 
-Running healthcheck
+![node](images/node.png)
 
 ---
 
-Scenario: Container with dependencies
+## Access secret
+
+```ruby
+describe 'fetches a secret' do
+  it { wait_for(secret).to match(/the_secret/) }
+end
+
+private
+
+def secret
+  command('curl localhost:3000/secret').stdout
+end
+```
 
 ---
 
-entrypoint with aws
+## Access secret
+
+```javascript
+app.get('/secret', 
+  (req, res) => 
+    res.send(`The super secret value is ${process.env.SECRET}`))
+```
 
 ---
 
-docker compose with localstack
+class: center middle
+
+![asm](images/asm.jpeg)
 
 ---
 
-run docker compose 
+## Injected at runtime
+
+```ruby
+describe file('/usr/sbin/entrypoint.sh') do
+  it { is_expected.to be_file }
+end
+```
+
+---
+
+## Injected at runtime
+
+
+```bash
+#!/usr/bin/env bash
+
+set -e
+
+secret=$(
+  aws --region "${AWS_REGION}" \
+  secretsmanager get-secret-value \
+  --secret-id "${SECRET_KEY}" \
+  | jq -r .SecretString)
+export SECRET="$secret"
+
+exec "$@"
+```
+
+---
+
+## Injected at runtime
+
+```Dockerfile
+FROM node:11.6-alpine
+
+# ... install awscli
+# ... node dependencies
+# ... copy app
+
+COPY entrypoint.sh /usr/sbin/entrypoint.sh
+
+RUN adduser -D runner
+
+USER runner
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+ENTRYPOINT ["/usr/sbin/entrypoint.sh"]
+CMD ["node", "app.js"]
+```
+
+---
+
+class: center middle
+
+## How to make the tests run now?
+
+---
+
+class: middle center
+
+.col-6[
+![localstack](images/localstack.png)
+
+## Localstack
+]
+
+.col-6[
+![docker compose](images/docker-compose.png)
+]
+
+---
+
+## Dependency setup
+
+```yaml
+version: '3'
+services:
+  localstack:
+    container_name: localstack
+    image: localstack/localstack
+
+    ports:
+      - "4584:4584"
+
+    environment:
+      - DEFAULT_REGION=eu-central-1
+      - SERVICES=secretsmanager
+      
+  ...
+```
+
+---
+
+## Dependency setup
+
+```yaml
+  app:
+    container_name: app
+    build: ./app
+
+    ports:
+      - "3000:3000"
+
+    env_file: .env
+
+    links:
+      - localstack
+```
+
+---
+
+## Dependency setup
+
+```ruby
+require 'docker/compose'
+set :docker_container, 'app'
+
+RSpec.configure do |config|
+  compose = Docker::Compose.new
+
+  config.before(:all) { compose.up(detached: true, build: true) }
+
+  config.after(:all) do
+    compose.kill
+    compose.rm(force: true)
+  end
+end
+```
+
+---
+
+## That's a lot of *TDD*
+
+```console
+  Container File "/usr/sbin/entrypoint.sh" should be file
+    1.28 seconds ./spec/container_spec.rb:29
+  Container fetches a secret from ASM should match /localstack_secret/
+    0.13081 seconds ./spec/container_spec.rb:33
+
+2 examples, 0 failures
+```
+
+---
+
+class: center middle
+
+## Code
+### https://github.com/sirech/example-serverspec-aws
+
+---
+
+class: transition
+
+# Are you convinced now?
+
+---
+
+# Summary
+
+## High quality containers are an important part of delivering software
+## A quick feedback cycle is possible with meaningful tests
+
+--
+
+## This can be accomplished doing TDD
+
 
 ---
 
@@ -393,7 +584,10 @@ run docker compose
 - _ServerSpec_ resource types: https://serverspec.org/resource_types.html
 - https://www.thoughtworks.com/insights/blog/modernizing-your-build-pipelines
 - Integrate _ServerSpec_ in _Concourse_: https://github.com/sirech/example-concourse-pipeline
-- Code for the example: https://github.com/sirech/talk-tdd-infra-redux/tree/master/code
+- Container example: https://github.com/sirech/talk-tdd-infra-redux/tree/master/code
+- Dependencies example: https://github.com/sirech/example-serverspec-aws
+
+---
 
 
 

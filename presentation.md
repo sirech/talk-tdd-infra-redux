@@ -511,8 +511,15 @@ class: transition
 
 ???
 
-- The previous example is already valuable. I have used similar tests in the last two projects I've been on
-- Sometimes the requirements are more complex, though
+- Two examples:
+ - Current proj: We develop our app and control our infra. These tests enable us to deploy to our test system and prod more confidently
+ - Previous proj: Service team building infra for others, including base images. You don't want to deliver broken images to other teams (loss of trust)
+
+---
+
+class: center middle
+
+## This is not a DSL, but regular Ruby code
 
 ---
 
@@ -529,6 +536,16 @@ class: center middle
 
 - node app with one route. In this case, there is a dependency, as we want to read a secret
 - We assume the first version of the Dockerfile is already there, built using TDD :)
+
+---
+
+class: center middle
+
+![asm](images/asm.jpeg)
+
+???
+
+- We are using ASM as our secret store
 
 ---
 
@@ -560,15 +577,9 @@ app.get('/secret',
     res.send(`The super secret value is ${process.env.SECRET}`))
 ```
 
----
-
-class: center middle
-
-![asm](images/asm.jpeg)
-
 ???
 
-- We are using ASM as our secret store
+- Secret handling transparent to the app
 
 ---
 
@@ -604,6 +615,10 @@ export SECRET="$secret"
 exec "$@"
 ```
 
+???
+
+- This might not be the safest way to inject secrets. Probably something like `pstore` would be better
+
 ---
 
 ## Injected at runtime
@@ -630,6 +645,11 @@ CMD ["node", "app.js"]
 class: center middle
 
 ## How to make the tests run now?
+
+???
+
+- Tests won't run -> no permission to access AWS
+- Image will build, but container won't start as it has a dependency
 
 ---
 
@@ -730,17 +750,21 @@ class: transition
 
 # Are you convinced now?
 
+???
+
+- I do hope so, because I'm out of slides
+
 ---
 
 # Summary
 
-## High quality containers are an important part of delivering software
-## A quick feedback cycle is possible with meaningful tests
+## What: Driving writing container code with tests
+## Why: Ensure you build high quality images, automate it, fast feedback loop
+## How: Leverage ServerSpec
 
---
+???
 
-## This can be accomplished doing TDD
-
+- ServerSpec is not the only alternative. Goss is another option
 
 ---
 

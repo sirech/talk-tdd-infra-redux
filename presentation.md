@@ -15,15 +15,11 @@ class: impact
 
 class: impact
 
-.col-4[
-## What?
-]
-
-.col-4[
+.col-6[
 ## Why?
 ]
 
-.col-4[
+.col-6[
 ## How?
 ]
 
@@ -60,6 +56,10 @@ class: impact center middle
 <hr />
 > What we’ve seen few teams do so far is combine the two trends and drive the writing of the container scripts using tests.
 
+???
+
+- What: Writing tests for your container code
+
 ---
 
 class: middle center
@@ -73,32 +73,15 @@ class: middle center
 
 ---
 
-class: center middle
-
-## Not much left to say about TDD
-
----
-
 class: middle center
 
 ![docker](images/docker.png)
 
----
+## Containers are everywhere
 
-class: center middle
+???
 
-## Path to Production
-
----
-
-class: full-width
-background-image: url(images/sample-pipeline.png)
-
----
-
-class: center middle
-
-## Containers make moving through integration stages effortless
+- Many applications nowadays are packaged using containers
 
 ---
 
@@ -110,6 +93,22 @@ class: center middle
 .img[![ecs](images/ecs.jpeg)]
 .img[![swarm](images/swarm.png)]
 ]
+
+???
+
+- Containers help in our path to production
+
+---
+
+class: center middle
+
+## Standard approach is try and see what happens
+
+---
+
+class: center middle
+
+## Which can go badly
 
 ---
 
@@ -132,19 +131,25 @@ class: middle
 ## Package the app as a container
 ## Would run in a VM as a sandbox
 
+???
+
+- First step was packaging the app, to run it in the sandbox. Then production would be deployed with this artifact as well
+- We didn't really know a lot about Docker in general, let alone best practices
+
 ---
 
-# How it went
+# What we did
 
 --
 
 .menu[
-- .item[Try something]
-- .item[Wait 40+ mins]
+- .item[Add stuff to Dockerfile]
+- .item[Wait 40+ mins for it to build]
+- .item[Test manually]
 - .item[Did not work]
-- .item[I don't know what I'm doing]
+- .item[I don't understand why]
 - .item[Despair]
-- .item[Consider career choice]
+- .item[Got to step 1]
 ]
 
 ---
@@ -167,11 +172,20 @@ class: transition
 
 ## There has to be a better way
 
+???
+
+- Didnt know enough about docker to do it differently
+
 ---
 
 class: center middle
 
 ## Fast feedback and automation are crucial
+
+???
+
+- Just the same as with your regular code
+- Containers are becoming first class citizens in our applications
 
 ---
 
@@ -179,11 +193,21 @@ class: center middle
 
 ## Use the right tools
 
+???
+
+- We have talked about what is TDD for containers, and why it has value. Now we'll get into the how
+
 ---
 
 class: center middle
 
 ![serverspec](images/serverspec.png)
+
+???
+
+- ServerSpec is a framework based on RSpec
+- From the Ruby world
+
 
 ---
 
@@ -197,6 +221,10 @@ class: transition
 
 # Let's containerize an app
 ## Now with a lot less pain
+
+???
+
+- I have given this talk before, and focused on what you can do with ServerSpec. This time I want to show you how we could put an application in a container, using TDD
 
 ---
 
@@ -232,6 +260,10 @@ RSpec.configure do |config|
 end
 ```
 
+???
+
+- This is ruby code, but it should be easy to follow
+
 ---
 
 ### OS Version
@@ -242,6 +274,11 @@ describe file('/etc/alpine-release') do
 end
 ```
 
+???
+
+- RSpec: Behaviour Driven Development for Ruby.
+- This is an actual test that can be run against the container defined in the _Init_
+
 ---
 
 ### OS Version
@@ -249,6 +286,10 @@ end
 ```Dockerfile
 FROM alpine:3.8
 ```
+
+???
+
+- Alpine is a great base for a production image
 
 ---
 
@@ -260,6 +301,10 @@ describe command('java -version') do
 end
 ```
 
+???
+
+- Having a test for the version of java means an update is always a conscious decission
+
 ---
 
 ### Java Version
@@ -267,6 +312,10 @@ end
 ```Dockerfile
 FROM openjdk:8-jre-alpine3.8
 ```
+
+???
+
+- Still alpine, but based on the official openjdk image
 
 ---
 
@@ -277,6 +326,10 @@ describe file('gs-rest-service.jar') do
   it { is_expected.to be_file }
 end
 ```
+
+???
+
+- jar built in a previous step as part of the pipeline
 
 ---
 
@@ -301,6 +354,10 @@ describe process('java') do
   its(:args) { is_expected.to contain('gs-rest-service.jar') }
 end
 ```
+
+???
+
+- ServerSpec does not only test building the image, but also running it as a container
 
 ---
 
@@ -327,6 +384,10 @@ describe 'listens to correct port' do
 end
 ```
 
+???
+
+- In a multi service architecture, ports can be tricky. So we wanto to make sure we codify the port we run on as a test
+
 ---
 
 ### Bound to right port
@@ -343,6 +404,10 @@ COPY build/libs/gs-rest-service-${VERSION}.jar gs-rest-service.jar
 CMD ["java", "-jar", "gs-rest-service.jar"]
 ```
 
+???
+
+- At this point the image will be running our app just fine. But building a high quality Docker image is more than that. You can codify practices and conventions in your tests so that you make sure the images you build conform to that.
+
 ---
 
 ### Not running under root
@@ -352,6 +417,10 @@ describe process('java') do
   its(:user) { is_expected.to eq('runner') }
 end
 ```
+
+???
+
+- It is a good practice to run the command under non-root, and that can be codified in a test
 
 ---
 
@@ -370,6 +439,33 @@ RUN adduser -D runner
 
 USER runner
 CMD ["java", "-jar", "gs-rest-service.jar"]
+```
+
+???
+
+- This image is simple, but already deployable
+- Not very far away from actual images that we deploy to prod
+
+---
+
+```console
+rspec spec/container_spec.rb
+Randomized with seed 61858
+.......
+
+Top 7 slowest examples (12.86 seconds, 99.9% of total time):
+  Application Container java listens to correct port should be listening with tcp
+    7.82 seconds ./spec/container_spec.rb:20
+  Application Container java Process "java" should be running
+    4.14 seconds ./spec/container_spec.rb:14
+  Application Container java Command "java -version" stderr should match /1.8.0_181/
+    0.3948 seconds ./spec/container_spec.rb:10
+  Application Container java Process "java" args should contain "gs-rest-service.jar"
+    0.15328 seconds ./spec/container_spec.rb:15
+  (more output ...)
+
+Finished in 12.87 seconds (files took 1.69 seconds to load)
+7 examples, 0 failures
 ```
 
 ---
@@ -391,6 +487,7 @@ background-image: url(images/pipeline.png)
 
 ???
 
+- this is how one of our APIs looks
 - offtopic: Running dind in a pipeline is tricky
 - links at the end for examples
 
@@ -401,11 +498,21 @@ class: center middle
 ## Code
 ### https://github.com/sirech/talk-tdd-infra-redux/tree/master/code
 
+???
+
+- The slides are a bit simplified to fit
+- The whole example, including the sample app, can be found under this link
+
 ---
 
 class: transition
 
 # This is but a start
+
+???
+
+- The previous example is already valuable. I have used similar tests in the last two projects I've been on
+- Sometimes the requirements are more complex, though
 
 ---
 
@@ -417,6 +524,11 @@ class: center middle
 .col-6[
 ![node-app](images/node-app.png)
 ]
+
+???
+
+- node app with one route. In this case, there is a dependency, as we want to read a secret
+- We assume the first version of the Dockerfile is already there, built using TDD :)
 
 ---
 
@@ -434,6 +546,10 @@ def secret
 end
 ```
 
+???
+
+- Arbitrary commands can be run in the test
+
 ---
 
 ## Access secret
@@ -450,6 +566,10 @@ class: center middle
 
 ![asm](images/asm.jpeg)
 
+???
+
+- We are using ASM as our secret store
+
 ---
 
 ## Injected at runtime
@@ -459,6 +579,10 @@ describe file('/usr/sbin/entrypoint.sh') do
   it { is_expected.to be_file }
 end
 ```
+
+???
+
+- It is a good practice to inject secrets at runtime and not at build time
 
 ---
 

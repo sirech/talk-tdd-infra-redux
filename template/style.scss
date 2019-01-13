@@ -252,5 +252,13 @@ blockquote {
   padding: 0.7rem 0.9rem;
 }
 
+.remark-slide-number {
+  display: none;
+}
+
+.spring {
+  margin-top: 200px;
+}
+
 // Rotating menu
 @import './extra.scss';

@@ -3,9 +3,6 @@ class: animation-fade
 layout: true
 
 <!-- This slide will serve as the base layout for all your slides -->
-.bottom-bar[
-  {{title}}
-]
 
 ---
 
@@ -18,12 +15,16 @@ class: impact
 
 class: impact
 
-.col-6[
-# Why?
+.col-4[
+## What?
 ]
 
-.col-6[
-# How?
+.col-4[
+## Why?
+]
+
+.col-4[
+## How?
 ]
 
 ???
@@ -72,6 +73,12 @@ class: middle center
 
 ---
 
+class: center middle
+
+## Not much left to say about TDD
+
+---
+
 class: middle center
 
 ![docker](images/docker.png)
@@ -81,6 +88,17 @@ class: middle center
 class: center middle
 
 ## Path to Production
+
+---
+
+class: full-width
+background-image: url(images/sample-pipeline.png)
+
+---
+
+class: center middle
+
+## Containers make moving through integration stages effortless
 
 ---
 
@@ -131,6 +149,20 @@ class: middle
 
 ---
 
+# How it went
+
+## Multiple months of work
+## Flaky, hard to change
+## Path to production didn't even reach production
+
+---
+
+class: center middle
+
+![fail](images/fail.jpg)
+
+---
+
 class: transition
 
 ## There has to be a better way
@@ -139,7 +171,7 @@ class: transition
 
 class: center middle
 
-## Fast feedback
+## Fast feedback and automation are crucial
 
 ---
 
@@ -161,30 +193,27 @@ class: center middle
 
 ---
 
-class: impact 
+class: transition 
 
 # Let's containerize an app
 ## Now with a lot less pain
 
 ---
 
-class: center
+class: center middle
 
-![springboot](images/springboot.jpg)
+.col-6[
+.spring[
+![springboot](images/springboot.png)
+]
+]
+.col-6[
+![java-app](images/java-app.png)
+]
 
 ???
 
 - spring boot application with one route (/greeting), JAR already built
-
----
-
-## Pic with server and one route
-
----
-
-class: center middle
-
-![jar](images/jar.png)
 
 ---
 
@@ -349,7 +378,7 @@ CMD ["java", "-jar", "gs-rest-service.jar"]
 
 --
 
-## Hell, yes!
+## Hell yes!
 
 --
 
@@ -359,6 +388,11 @@ CMD ["java", "-jar", "gs-rest-service.jar"]
 
 class: full-width
 background-image: url(images/pipeline.png)
+
+???
+
+- offtopic: Running dind in a pipeline is tricky
+- links at the end for examples
 
 ---
 
@@ -375,7 +409,14 @@ class: transition
 
 ---
 
+class: center middle
+
+.col-6[
 ![node](images/node.png)
+]
+.col-6[
+![node-app](images/node-app.png)
+]
 
 ---
 

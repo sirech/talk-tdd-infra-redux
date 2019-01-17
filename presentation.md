@@ -82,6 +82,7 @@ class: middle center
 ???
 
 - Many applications nowadays are packaged using containers
+- Containers provide a ton of flexibility to package apps and deploy them to any environment, even if you don't control it
 
 ---
 
@@ -96,7 +97,7 @@ class: center middle
 
 ???
 
-- Containers help in our path to production
+- They are an important component in the path to production
 
 ---
 
@@ -152,6 +153,12 @@ class: middle
 - .item[Got to step 1]
 ]
 
+???
+
+- Jenkins job that built the image
+- slow, frustrating
+- little insight won
+
 ---
 
 # How it went
@@ -159,6 +166,11 @@ class: middle
 ## Multiple months of work
 ## Flaky, hard to change
 ## Path to production didn't even reach production
+
+???
+
+- Afraid to make changes
+- led to no improvements over time
 
 ---
 
@@ -185,7 +197,7 @@ class: center middle
 ???
 
 - Just the same as with your regular code
-- Containers are becoming first class citizens in our applications
+- Containers are becoming first class citizens in our ecosystem
 
 ---
 
@@ -406,7 +418,9 @@ CMD ["java", "-jar", "gs-rest-service.jar"]
 
 ???
 
-- At this point the image will be running our app just fine. But building a high quality Docker image is more than that. You can codify practices and conventions in your tests so that you make sure the images you build conform to that.
+- At this point the image will be running our app just fine. 
+- Building a high quality Docker image is more than that. 
+- You can codify practices and conventions in your tests so that you make sure the images you build conform to that.
 
 ---
 
@@ -468,6 +482,12 @@ Finished in 12.87 seconds (files took 1.69 seconds to load)
 7 examples, 0 failures
 ```
 
+???
+
+- how to run it?
+- with ruby and docker, it's a matter of executing it
+- proves that what I build conforms to the specification I defined
+
 ---
 
 # Did the tests pass?
@@ -480,6 +500,10 @@ Finished in 12.87 seconds (files took 1.69 seconds to load)
 
 ## Cool, let's run them on every commit now
 
+???
+
+- Just running the tests once is useful, but not enough
+
 ---
 
 class: full-width
@@ -488,6 +512,8 @@ background-image: url(images/pipeline.png)
 ???
 
 - this is how one of our APIs looks
+- based on Concourse, Jenkins or any other CI would work the same way
+- no point in deploying to a staging environment if we know the image is not good
 - offtopic: Running dind in a pipeline is tricky
 - links at the end for examples
 
@@ -545,6 +571,7 @@ class: center middle
 
 ???
 
+- Don't put your secrets in the source code, use a proper store
 - We are using ASM as our secret store
 
 ---
@@ -640,6 +667,10 @@ ENTRYPOINT ["/usr/sbin/entrypoint.sh"]
 CMD ["node", "app.js"]
 ```
 
+???
+
+- no need to modify the app to make it use secrets
+
 ---
 
 class: center middle
@@ -665,6 +696,11 @@ class: middle center
 ![docker compose](images/docker-compose.png)
 ]
 
+???
+
+- localstack: mock aws services locally (Tech Radar '19)
+- docker compose: orchestrate multiple containers locally
+
 ---
 
 ## Dependency setup
@@ -686,6 +722,11 @@ services:
   ...
 ```
 
+???
+
+- my examples are reaching the limit of what can fit in a slide
+- standard docker-compose.yml -> can be run locally
+
 ---
 
 ## Dependency setup
@@ -703,6 +744,11 @@ services:
     links:
       - localstack
 ```
+
+???
+
+- missing: how to put the secret into localstack
+- missing: adapting urls
 
 ---
 
@@ -736,6 +782,12 @@ end
 
 2 examples, 0 failures
 ```
+
+???
+
+- caveat: This a unit test using mocks
+- not tested: do we have access to ASM, is the secret there
+- which is ok -> different levels of abstraction
 
 ---
 
